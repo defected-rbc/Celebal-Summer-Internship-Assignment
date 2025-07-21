@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Streamlit Home Loan Approval Predictor Application
 
@@ -18,18 +17,25 @@ import joblib
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from pathlib import Path # Import Path for robust file handling
 
 # --- 1. Define the Streamlit App Layout (MUST BE FIRST STREAMLIT COMMAND) ---
 st.set_page_config(page_title="Home Loan Approval Predictor", layout="centered")
 
 # --- 2. Load the pre-trained model and scaler ---
+# Construct paths relative to the current script's directory
+current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+model_path = current_dir / 'loan_approval_model.joblib'
+scaler_path = current_dir / 'loan_approval_scaler.joblib'
+
 try:
-    model = joblib.load('loan_approval_model.joblib')
-    scaler = joblib.load('loan_approval_scaler.joblib')
+    model = joblib.load(model_path)
+    scaler = joblib.load(scaler_path)
     st.success("Model and scaler loaded successfully!")
 except FileNotFoundError:
     st.error("Error: Model or scaler files not found.")
-    st.error("Please ensure 'loan_approval_model.joblib' and 'loan_approval_scaler.joblib' are in the same directory.")
+    st.error(f"Attempted to load from: {model_path} and {scaler_path}")
+    st.error("Please ensure 'loan_approval_model.joblib' and 'loan_approval_scaler.joblib' are in the same directory as this script.")
     st.stop() # Stop the app if files are not found
 except Exception as e:
     st.error(f"An error occurred while loading the model/scaler: {e}")
