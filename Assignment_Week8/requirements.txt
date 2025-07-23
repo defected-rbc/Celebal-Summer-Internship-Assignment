@@ -2,3 +2,4 @@ pandas
 chromadb
 google-generativeai
 sentence-transformers
+joblib
